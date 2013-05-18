@@ -1,0 +1,248 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /><style type='text/css'>
+body {
+  font-family: 'Helvetica';
+  letter-spacing:-5px;
+  background:#000;
+  background-size:100%;
+  color:#fff;
+  margin:0;
+  padding:0;
+  font-weight:bold;
+}
+
+h1, h2, h3, p {
+  margin:0;
+}
+
+em, a {
+  font-style:normal;
+  color:#8dbd0c;
+}
+
+a {
+  background: #34d0e7;
+  color:#000;
+  text-decoration:none;
+}
+
+img {
+  width:100%;
+}
+
+div {
+  cursor:pointer;
+  cursor:hand;
+  position:absolute;
+  top:0;
+  left:0;
+}
+</style>
+<script src="d3.min.js"></script>
+<script type='text/javascript'>
+window.onload = function() {
+    var s = document.getElementsByTagName('div'), cur = 0;
+    var color = d3.scale.category20();
+    var color2 = d3.scale.ordinal()
+      .range([
+        "#ECE765",
+        "#48B8C2",
+        "#CF915F"
+      ])    
+  if (!s) return;
+    function go(n) {
+      //fill in the tech tags
+      var div = d3.select(s[n])
+      div.selectAll("tech").each(function(d,i) {
+        d3.select(this)
+        .style("color", color(this.dataset.name))
+        .style("float", "right")
+        .style("padding", "20px")
+        .text(this.dataset.name)
+      })
+      div.selectAll("part").each(function(d,i) {
+        d3.select(this)
+        .style("color", color2(this.dataset.name))
+        .text(this.dataset.name)
+      })
+
+      div.selectAll("a").attr("target", "_blank");
+
+      //do the BIG stuff
+      cur = n;
+      var i = 1e3, e = s[n];
+      for (var k = 0; k < s.length; k++) s[k].style.display = 'none';
+      e.style.display = 'inline';
+      e.style.fontSize = i + 'px';
+      if (e.firstChild.nodeName === 'IMG') {
+          document.body.style.backgroundImage = 'url(' + e.firstChild.src + ')';
+          e.firstChild.style.display = 'none';
+      } else {
+          document.body.style.backgroundImage = '';
+          document.body.style.backgroundColor = e.style.backgroundColor;
+      }
+      while (
+          e.offsetWidth > window.innerWidth ||
+          e.offsetHeight > window.innerHeight) {
+          e.style.fontSize = (i -= 10) + 'px';
+          if (i < 0) break;
+      }
+      e.style.marginTop = ((window.innerHeight - e.offsetHeight) / 2) + 'px';
+      if (window.location.hash !== n) window.location.hash = n;
+      document.title = e.textContent || e.innerText; 
+    }
+    document.onclick = function() {
+        go(++cur % (s.length));
+    };
+    document.onkeydown = function(e) {
+        (e.which === 39) && go(Math.min(s.length - 1, ++cur));
+        (e.which === 37) && go(Math.max(0, --cur));
+    };
+    function parse_hash() {
+        return Math.max(Math.min(
+            s.length - 1,
+            parseInt(window.location.hash.substring(1), 10)), 0);
+    }
+    if (window.location.hash) cur = parse_hash() || cur;
+    window.onhashchange = function() {
+        var c = parse_hash();
+        if (c !== cur) go(c);
+    };
+
+    go(cur);
+};
+</script></head><body>
+<div>prototyping with <em>d3.js</em>
+</div>
+<div>
+  <a href="">a little data collection</a>
+</div>
+<div>
+  i am 
+  <em><a href="http://twitter.com/enjalot">@enjalot</a></em><br><br>
+  i make <a href="youtube">d3 tutorial videos</a><br><br>
+  with <a href="http://tributary.io">tributary</a>
+</div>
+<div>
+  i do <a href="http://tributary.io/inlet/5088240?user=enjalot">data visualization with d3</a><br>
+</div>
+<div>
+  i co-organize <a href="http://enjalot.github.io/1024">San Francisco d3 meetup</a>
+</div>
+<div>
+  i &lt3 meta: <a href="http://tributary.io/inlet/5564948">prototyping tributary with tributary</a>
+</div>
+
+<div>
+  <img src="" title="utilitybelt" width=0 height=0></img>
+  d3.js
+</div>
+
+<div>
+  <tech data-name=html></tech>
+  <tech data-name=css></tech>
+  <tech data-name=svg></tech>
+  <tech data-name=js></tech>
+  <tech data-name=JSON></tech>
+  <tech data-name=canvas></tech>
+</div>
+
+<div>
+  <img src="" title="d3examples" width=0 height=0></img>
+  data vis
+</div>
+
+<div>
+  fuck charts
+</div>
+
+<div>
+  communicating: <br>
+  <part data-name=data></part> + <br>
+  <part data-name=vis></part> + <br>
+  <part data-name=interaction></part>
+</div>
+
+<div>
+  <part data-name=data></part>
+  <tech data-name=js></tech><br><br>
+  <a href="https://github.com/mbostock/d3/wiki/Layouts">d3 layouts</a>
+</div>
+
+<div>
+  <part data-name=data></part>
+  <tech data-name=JSON></tech><br>
+  <a href="">trees</a>
+</div>
+
+<div>
+  <part data-name=vis></part>
+  <tech data-name=svg></tech><br><br>
+  <a href="path arc">d3 generators</a>
+</div>
+
+<div>
+  <part data-name=vis></part>
+  <tech data-name=canvas></tech><br><br>
+  <a href="geo example">details</a>
+</div>
+
+<div>
+  <part data-name=vis></part>
+  <tech data-name=html></tech>
+  <tech data-name=css></tech>
+  <a href="treemap">divs and such</a>
+</div>
+
+<div>
+  <part data-name=interaction></part>
+  <tech data-name=svg></tech><br><br>
+  <a href="http://tributary.io/inlet/5410501">stacked</a>
+</div>
+<div>
+  <part data-name=interaction></part>
+  <tech data-name=svg></tech><br><br>
+  <a href="d3 meetup map + scatterplot">linking</a>
+</div>
+
+<div>
+  <part data-name=interaction></part>
+  <tech data-name=html></tech>
+  <tech data-name=css></tech>
+  <a href="checkin">sup DOM?</a>
+</div>
+<div>
+  <part data-name=interaction></part>
+  <tech data-name=js></tech><br><br>
+  <a href="">crossfilter</a>
+</div>
+<div>
+  <part data-name=interaction></part>
+  <tech data-name=js></tech><br><br>
+  <a href="">simulation</a>
+</div>
+
+<div>
+  overwhelming?
+</div>
+
+<div>
+  first principles
+</div>
+
+<div>
+  resources<br>
+  <a href="">community gallery</a><br><br>
+  <a href="">mike's blog</a><br><br>
+  <a href="http://d3js.org">d3 home page</a><br><br>
+  <a href="BV data vis">brain food</a>
+</div>
+
+<div>
+  preview
+</div>
+
+<div>
+  <a href="http://tributary.io/inlet" target=_blank>live</a>
+</div>
+
+<div>made with <em><a href="https://github.com/tmcw/big" target=_blank>Big</em></div>
